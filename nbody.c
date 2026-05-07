@@ -105,6 +105,10 @@ int main(int argc, char **argv)
 	for (t_now=0;t_now<DURATION;t_now+=INTERVAL){
 		compute();
 	}
+	// Block until all GPU work is done and copy final pos/vel back to CPU.
+	// Done before stopping the clock so the timer reflects total compute
+	// time including the final device→host transfer.
+	syncToHost();
 	clock_t t1=clock()-t0;
 #ifdef DEBUG
 	printSystem(stdout);
